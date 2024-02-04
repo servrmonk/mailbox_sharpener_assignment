@@ -4,18 +4,21 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
-  Link,
+  
   Paper,
   Typography,
   TextField,
   Checkbox,
 } from "@mui/material";
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 import React, { useRef, useState } from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CreateIcon from "@mui/icons-material/Create";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginFun } from "../Redux/AuthSlice";
 
 export default function LoginPage() {
   // STYLING PART
@@ -40,6 +43,7 @@ export default function LoginPage() {
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -78,8 +82,8 @@ export default function LoginPage() {
           console.log("Login succesfully");
           localStorage.setItem("idToken", data.idToken);
           localStorage.setItem("email", data.email);
-          // dispatch(loginFun(data.idToken))
-          navigate("/homepage");
+          dispatch(loginFun(data.idToken))
+          navigate("/sharpener-mailbox");
           
 
 
@@ -184,9 +188,9 @@ export default function LoginPage() {
                 Login
               </Button>
               <Typography>
-                <Link href="#" underline="hover">
-                  Forgot Password
-                </Link>
+              <ReactRouterLink to='/forgetPassword' style={{ textDecoration: "none", color: "inherit" }}>
+                Forgot Password
+              </ReactRouterLink>
               </Typography>
             </>
           ) : (
