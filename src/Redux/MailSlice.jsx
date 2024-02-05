@@ -9,12 +9,14 @@ const MailSlice = createSlice({
   name: "mailSlice",
   initialState: initialMailState,
   reducers: {
-      inboxMail(state, action) {
-        state.inboxMailArr.push(action.payload);
-      },
+    inboxMail(state, action) {
+      // state.inboxMailArr.push(action.payload);
+      state.inboxMailArr = action.payload;
+    },
     sentMail(state, action) {
-      state.sentEmailArr.push(action.payload);
-    }
+      // state.sentEmailArr.push(action.payload);
+      state.sentEmailArr = action.payload;
+    },
   },
 });
 export default MailSlice.reducer;
@@ -26,7 +28,7 @@ function cleanGmailAddress(emailid) {
   }
 }
 export const sentMailToFirebase = (action) => {
-  console.log("Action before posting ", action);
+  // console.log("Action before posting ", action);
   let email = localStorage.getItem("email") || false;
   let cleanEmailForSent = cleanGmailAddress(email);
   let cleanEmailForInbox = cleanGmailAddress(action.to);
@@ -35,19 +37,21 @@ export const sentMailToFirebase = (action) => {
 
     try {
       // for user who sent the data
-      const responseForSent = await axios.post(
+      await axios.post(
+        // const responseForSent = await axios.post(
         `${url}/sent/${cleanEmailForSent}.json`,
         action
       );
-      const data1 = await responseForSent.data;
-      console.log("Response from sentMailToFirebase ", data1);
+      // const data1 = await responseForSent.data;
+      // console.log("Response from sentMailToFirebase ", data1);
       //   for reciever in inbox
-      const responseForInbox = await axios.post(
+      await axios.post(
+      // const responseForInbox = await axios.post(
         `${url}/inbox/${cleanEmailForInbox}.json`,
         action
       );
-      const data2 = await responseForInbox.data;
-      console.log("Response from sentMailToFirebase ", data2);
+      // const data2 = await responseForInbox.data;
+      // console.log("Response from sentMailToFirebase ", data2);
     } catch (error) {
       console.log("Error in postData", error);
 
@@ -68,6 +72,9 @@ export const sentMailToFirebase = (action) => {
 };
 
 export const getSentMailFromFirebase = () => {
+  let email = localStorage.getItem("email") || false;
+  let cleanEmailForSent = cleanGmailAddress(email);
+
   return async function sentData(dispatch) {
     let url = `https://sharpener-assignment-bbf12-default-rtdb.firebaseio.com`;
 
@@ -75,13 +82,28 @@ export const getSentMailFromFirebase = () => {
       // get back sent user data
       const responseForSent = await axios.get(`${url}/sent.json`);
       const data1 = await responseForSent.data;
-      dispatch(sentMail(data1))
-      console.log("Response from responseForSent ", data1);
+
+      // console.log("Data1 ",data1);
+      dispatch(sentMail(data1));
+      // console.log("Response from responseForSent ", data1);
       //  get back  user Inbox data
-      const responseForInbox = await axios.get(`${url}/inbox.json`);
+      const responseForInbox = await axios.get(
+        `${url}/inbox/${cleanEmailForSent}.json`
+      );
       const data2 = await responseForInbox.data;
-      dispatch(inboxMail(data2))
-      console.log("Response from responseForInbox ", data2);
+      // console.log("Value of data2 ", data2);
+      const emailArray = [];
+      for (const key in data2) {
+        emailArray.push({ id: key, ...data2[key] });
+      }
+
+      // console.log("EmailArray in mailslice before sorting ", emailArray);
+      // Sort emails based on the timestamp in descending order
+      emailArray.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
+      // console.log("EmailArray in mailslice after sorting ", emailArray);
+
+      dispatch(inboxMail(emailArray));
+      // console.log("Response from responseForInbox ", data2);
     } catch (error) {
       console.log("Error in postData", error);
       if (error.response) {
