@@ -80,30 +80,33 @@ export const getSentMailFromFirebase = () => {
 
     try {
       // get back sent user data
-      const responseForSent = await axios.get(`${url}/sent.json`);
+      const responseForSent = await axios.get(`${url}/sent/${cleanEmailForSent}.json`);
       const data1 = await responseForSent.data;
 
-      // console.log("Data1 ",data1);
-      dispatch(sentMail(data1));
-      // console.log("Response from responseForSent ", data1);
-      //  get back  user Inbox data
+      const emailArrayForSent = [];
+      for (const key in data1) {
+        emailArrayForSent.push({ id: key, ...data1[key] });
+      }      
+      emailArrayForSent.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
+      dispatch(sentMail(emailArrayForSent));
+      
+
       const responseForInbox = await axios.get(
         `${url}/inbox/${cleanEmailForSent}.json`
       );
       const data2 = await responseForInbox.data;
-      // console.log("Value of data2 ", data2);
+      
       const emailArray = [];
       for (const key in data2) {
         emailArray.push({ id: key, ...data2[key] });
       }
 
-      // console.log("EmailArray in mailslice before sorting ", emailArray);
-      // Sort emails based on the timestamp in descending order
+      
       emailArray.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
-      // console.log("EmailArray in mailslice after sorting ", emailArray);
+      
 
       dispatch(inboxMail(emailArray));
-      // console.log("Response from responseForInbox ", data2);
+      
     } catch (error) {
       console.log("Error in postData", error);
       if (error.response) {
@@ -118,6 +121,29 @@ export const getSentMailFromFirebase = () => {
         console.log("Error during request setup:", error.message);
       }
       console.log("Error config:", error.config);
+    }
+  };
+};
+export const deleteDataFromFirebase = (action,type) => {
+  console.log("Action in delete ",action,type);
+  let email =  localStorage.getItem('email') || false;
+  
+ 
+  let cleanEmail = cleanGmailAddress(email);
+  console.log("clean email ",cleanEmail);
+  return async function delHandler() {
+    if (!action) {
+      console.error("Action object must have an 'id' property for deletion.");
+      return;
+    }
+    let url = `https://sharpener-assignment-bbf12-default-rtdb.firebaseio.com/${type}/${cleanEmail}/${action}.json`;
+
+    try {
+      const responseInDeleteHandler = await axios.delete(url);
+      console.log("Data",responseInDeleteHandler);
+    
+    } catch (error) {
+      console.log("Error ", error);
     }
   };
 };

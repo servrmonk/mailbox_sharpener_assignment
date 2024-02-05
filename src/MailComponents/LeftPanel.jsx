@@ -1,5 +1,6 @@
 import React from "react";
 import Message from "./Message";
+import { Link as ReactRouterLink } from "react-router-dom";
 
 export default function LeftPanel() {
   return (
@@ -12,26 +13,7 @@ export default function LeftPanel() {
         width: "20vw",
       }}
     >
-      {/* <div
-        style={{
-          position:'fixed',
-          width: "12vw",
-          height:'4vw',
-          marginLeft: "0.8vw",
-          display: "flex",
-          alignItems: "center",
-          borderRadius: "20px",
-          backgroundColor: "#BEE0FF",
-          
-        }}
-      >
-        <img
-          src="http://cdn.onlinewebfonts.com/svg/img_551847.png"
-          alt="compose"
-          style={{ width: "1.2vw", marginLeft: "2vw" }}
-        />
-        <h4 style={{ marginLeft: "1.6vw", fontWeight: "400",fontSize:"1.3vw" }}>Compose</h4>
-      </div> */}
+    
       <Message />
 
       <div
@@ -48,11 +30,11 @@ export default function LeftPanel() {
           alt="Inbox"
           style={{ width: "1.2vw", marginLeft: "2vw" }}
         />
-        <span
-          style={{ marginLeft: "1.6vw", fontWeight: "400", fontSize: "1.3vw" }}
+        <ReactRouterLink to="/inbox"
+          style={{cursor: "pointer",textDecoration:'none',color:'inherit', marginLeft: "1.6vw", fontWeight: "400", fontSize: "1.3vw", }}
         >
           Inbox
-        </span>
+        </ReactRouterLink>
       </div>
       <div
         style={{
@@ -109,11 +91,12 @@ export default function LeftPanel() {
           alt="send"
           style={{ width: "1.2vw", marginLeft: "2vw" }}
         />
-        <span
-          style={{ marginLeft: "1.6vw", fontWeight: "400", fontSize: "1.3vw" }}
+        <ReactRouterLink
+        to='/sentMail' 
+          style={{textDecoration:'none',color:'inherit',cursor: "pointer", marginLeft: "1.6vw", fontWeight: "400", fontSize: "1.3vw" }}
         >
           Send
-        </span>
+        </ReactRouterLink>
       </div>
     </div>
   );

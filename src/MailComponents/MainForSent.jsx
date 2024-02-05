@@ -2,14 +2,15 @@ import { Grid } from "@mui/material";
 import React from "react";
 
 import LeftPanel from "./LeftPanel";
-import Middle from "./Middle";
 import RightPanel from "./RightPanel";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import SentMailUi from "./SentMailUi";
 
-export default function Main() {
+export default function MainForSent() {
   return (
-  
+    //   i m going to divide the home page by using grid component from the material ui
+    // the background colour is same
     <div>
       <Grid container>
         <Grid item xs={12}>
@@ -19,7 +20,7 @@ export default function Main() {
           <LeftPanel />
         </Grid>
         <Grid item xs={9}>
-          <Middle />
+          <SentMailUi />
         </Grid>
         <Grid item xs={1}>
           <RightPanel />
