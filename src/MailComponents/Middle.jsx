@@ -18,7 +18,14 @@ export default function Middle() {
 
   useEffect(() => {
     dispatch(getSentMailFromFirebase());
+    const interval = setInterval(() => {
+      console.log("inside 2s");
+      dispatch(getSentMailFromFirebase());
+    }, 2000);
+    return () => clearInterval(interval);
   }, [dispatch]);
+  
+
 
   useEffect(() => {
     setArrForUi(mailArr);
