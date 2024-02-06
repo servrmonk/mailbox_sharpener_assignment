@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 
 import LeftPanel from "./LeftPanel";
 import Middle from "./Middle";
@@ -7,19 +7,26 @@ import RightPanel from "./RightPanel";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import SentMailUi from "./SentMailUi";
-import { useSelector } from "react-redux";
-// import FullPageView from "./FullPageView";
-// import FullPageViewForSent from "./FullPageViewForSent";
-// import FullPageView from "./FullPageView";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { updateIsSent } from "../Redux/MailSlice";
 
 export default function Main() {
-  const {isSent} = useSelector(state => state.mailS)
-  // const [isSent, setIsSent] = useState(false);
-  
+  // const { isSent } = useSelector((state) => state.mailS);
 
+  const dispatch = useDispatch();
+  const { isSent } = useSelector((state) => state.mailS);
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check if the current location is "/sentMail" and dispatch updateIsSent accordingly
+    if (location.pathname === "/sentMail") {
+      dispatch(updateIsSent(true));
+    } else {
+      dispatch(updateIsSent(false));
+    }
+  }, [location.pathname, dispatch]);
   return (
-  
     <div>
       <Grid container>
         <Grid item xs={12}>
@@ -29,9 +36,7 @@ export default function Main() {
           <LeftPanel />
         </Grid>
         <Grid item xs={9}>
-        {isSent ? <SentMailUi /> : <Middle />} ||
-        {/* {inboxDetails && <FullPageView />}||
-        {sentDetails && <FullPageViewForSent />} */}
+          {isSent ? <SentMailUi /> : <Middle />} ||
         </Grid>
         <Grid item xs={1}>
           <RightPanel />

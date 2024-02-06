@@ -19,12 +19,12 @@ export default function AllRoutes() {
         <>
           
           <Route path="/sharpener-mailbox" element={<Main />} />
-          <Route path="*" element={<Main />} />
-          <Route path="/sentMail" element={<Main />} />
           
           <Route path="/inbox" element={<Main />} />
+          <Route path="/sentMail" element={<Main />} />
           <Route path="/inbox/:id" element={<MainForDetails />} />
           <Route path="/sentMail/:id" element={<MainForDetails />} />
+          <Route path="*" element={<Main />} />
           
         </>
       ) : (
