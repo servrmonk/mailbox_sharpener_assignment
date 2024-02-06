@@ -6,8 +6,18 @@ import Middle from "./Middle";
 import RightPanel from "./RightPanel";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import SentMailUi from "./SentMailUi";
+import { useSelector } from "react-redux";
+// import FullPageView from "./FullPageView";
+// import FullPageViewForSent from "./FullPageViewForSent";
+// import FullPageView from "./FullPageView";
+
 
 export default function Main() {
+  const {isSent} = useSelector(state => state.mailS)
+  // const [isSent, setIsSent] = useState(false);
+  
+
   return (
   
     <div>
@@ -19,7 +29,9 @@ export default function Main() {
           <LeftPanel />
         </Grid>
         <Grid item xs={9}>
-          <Middle />
+        {isSent ? <SentMailUi /> : <Middle />} ||
+        {/* {inboxDetails && <FullPageView />}||
+        {sentDetails && <FullPageViewForSent />} */}
         </Grid>
         <Grid item xs={1}>
           <RightPanel />

@@ -1,8 +1,19 @@
 import React from "react";
 import Message from "./Message";
 import { Link as ReactRouterLink } from "react-router-dom";
+import { updateIsSent } from "../Redux/MailSlice";
+import { useDispatch } from "react-redux";
 
 export default function LeftPanel() {
+  const dispatch = useDispatch();
+
+  // Call this function whenever you want to update isSent
+  const changeState = () => {
+    dispatch(updateIsSent(true));
+  };
+  const changeState1 = () => {
+    dispatch(updateIsSent(!true));
+  };
   return (
     <div
       style={{
@@ -30,7 +41,8 @@ export default function LeftPanel() {
           alt="Inbox"
           style={{ width: "1.2vw", marginLeft: "2vw" }}
         />
-        <ReactRouterLink to="/inbox"
+        <ReactRouterLink to="/inbox"         onClick={changeState1}
+
           style={{cursor: "pointer",textDecoration:'none',color:'inherit', marginLeft: "1.6vw", fontWeight: "400", fontSize: "1.3vw", }}
         >
           Inbox
@@ -93,9 +105,10 @@ export default function LeftPanel() {
         />
         <ReactRouterLink
         to='/sentMail' 
+        onClick={changeState}
           style={{textDecoration:'none',color:'inherit',cursor: "pointer", marginLeft: "1.6vw", fontWeight: "400", fontSize: "1.3vw" }}
         >
-          Send
+          Sent
         </ReactRouterLink>
       </div>
     </div>

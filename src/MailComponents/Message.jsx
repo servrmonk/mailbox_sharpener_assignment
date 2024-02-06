@@ -43,8 +43,9 @@ export default function Message() {
     }
 
     let timeStamp = new Date().toJSON();
+    let isRead = false;
 
-    return { to, subject, msg, timeStamp };
+    return { to, subject, msg, timeStamp,isRead };
   };
 
   const handleSubmit = (e) => {

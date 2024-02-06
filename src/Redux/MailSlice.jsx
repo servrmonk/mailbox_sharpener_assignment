@@ -4,23 +4,42 @@ import axios from "axios";
 const initialMailState = {
   inboxMailArr: [],
   sentEmailArr: [],
+  isSent: false,
+  inboxDetails: false,
+  sentDetails: false,
+  
 };
 const MailSlice = createSlice({
   name: "mailSlice",
   initialState: initialMailState,
   reducers: {
     inboxMail(state, action) {
-      // state.inboxMailArr.push(action.payload);
       state.inboxMailArr = action.payload;
     },
     sentMail(state, action) {
-      // state.sentEmailArr.push(action.payload);
       state.sentEmailArr = action.payload;
     },
+    updateIsSent(state, action) {
+      state.isSent = action.payload;
+    },
+    inboxDetailsFire(state, action) {
+      state.inboxDetails = action.payload;
+    },
+    sentDetailsFire(state, action) {
+      state.sentDetails = action.payload;
+    },
+   
   },
 });
 export default MailSlice.reducer;
-export const { sentMail, inboxMail } = MailSlice.actions;
+export const {
+  sentMail,
+  inboxMail,
+  updateIsSent,
+  inboxDetailsFire,
+  sentDetailsFire,
+  
+} = MailSlice.actions;
 
 function cleanGmailAddress(emailid) {
   if (emailid) {
@@ -42,11 +61,9 @@ export const sentMailToFirebase = (action) => {
         `${url}/sent/${cleanEmailForSent}.json`,
         action
       );
-      // const data1 = await responseForSent.data;
-      // console.log("Response from sentMailToFirebase ", data1);
-      //   for reciever in inbox
+
       await axios.post(
-      // const responseForInbox = await axios.post(
+        // const responseForInbox = await axios.post(
         `${url}/inbox/${cleanEmailForInbox}.json`,
         action
       );
@@ -80,33 +97,33 @@ export const getSentMailFromFirebase = () => {
 
     try {
       // get back sent user data
-      const responseForSent = await axios.get(`${url}/sent/${cleanEmailForSent}.json`);
+      const responseForSent = await axios.get(
+        `${url}/sent/${cleanEmailForSent}.json`
+      );
       const data1 = await responseForSent.data;
 
       const emailArrayForSent = [];
       for (const key in data1) {
         emailArrayForSent.push({ id: key, ...data1[key] });
-      }      
-      emailArrayForSent.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
+      }
+      emailArrayForSent.sort(
+        (a, b) => new Date(b.timeStamp) - new Date(a.timeStamp)
+      );
       dispatch(sentMail(emailArrayForSent));
-      
 
       const responseForInbox = await axios.get(
         `${url}/inbox/${cleanEmailForSent}.json`
       );
       const data2 = await responseForInbox.data;
-      
+
       const emailArray = [];
       for (const key in data2) {
         emailArray.push({ id: key, ...data2[key] });
       }
 
-      
       emailArray.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
-      
 
       dispatch(inboxMail(emailArray));
-      
     } catch (error) {
       console.log("Error in postData", error);
       if (error.response) {
@@ -124,13 +141,12 @@ export const getSentMailFromFirebase = () => {
     }
   };
 };
-export const deleteDataFromFirebase = (action,type) => {
-  console.log("Action in delete ",action,type);
-  let email =  localStorage.getItem('email') || false;
-  
- 
+export const deleteDataFromFirebase = (action, type) => {
+  console.log("Action in delete ", action, type);
+  let email = localStorage.getItem("email") || false;
+
   let cleanEmail = cleanGmailAddress(email);
-  console.log("clean email ",cleanEmail);
+  console.log("clean email ", cleanEmail);
   return async function delHandler() {
     if (!action) {
       console.error("Action object must have an 'id' property for deletion.");
@@ -140,10 +156,10 @@ export const deleteDataFromFirebase = (action,type) => {
 
     try {
       const responseInDeleteHandler = await axios.delete(url);
-      console.log("Data",responseInDeleteHandler);
-    
+      console.log("Data", responseInDeleteHandler);
     } catch (error) {
       console.log("Error ", error);
     }
   };
 };
+

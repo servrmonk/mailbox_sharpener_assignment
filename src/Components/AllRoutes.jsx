@@ -4,8 +4,11 @@ import Main from "../MailComponents/Main";
 import LoginPage from "./loginPage";
 import { useSelector } from "react-redux";
 import ForgetPassword from "./ForgetPasswordPage";
+import MainForDetails from "../MailComponents/MainForDetails";
 
-import MainForSent from "../MailComponents/MainForSent";
+// import MainForSent from "../MailComponents/MainForSent";
+// import FullPageView from "../MailComponents/FullPageView";
+// import FullPageViewForSent from "../MailComponents/FullPageViewForSent";
 
 export default function AllRoutes() {
   const { isAuth: data } = useSelector((state) => state.auth);
@@ -17,8 +20,12 @@ export default function AllRoutes() {
           
           <Route path="/sharpener-mailbox" element={<Main />} />
           <Route path="*" element={<Main />} />
-          <Route path="/sentMail" element={<MainForSent />} />
-          {/* <Route path="/inbox" element={<Main />} /> */}
+          <Route path="/sentMail" element={<Main />} />
+          
+          <Route path="/inbox" element={<Main />} />
+          <Route path="/inbox/:id" element={<MainForDetails />} />
+          <Route path="/sentMail/:id" element={<MainForDetails />} />
+          
         </>
       ) : (
         <>

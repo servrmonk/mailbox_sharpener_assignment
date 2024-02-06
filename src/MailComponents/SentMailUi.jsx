@@ -1,8 +1,14 @@
 import { ListItem, Paper } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { deleteDataFromFirebase, getSentMailFromFirebase } from "../Redux/MailSlice";
+import {
+  deleteDataFromFirebase,
+  getSentMailFromFirebase,
+  inboxDetailsFire,
+  sentDetailsFire,
+} from "../Redux/MailSlice";
 import { useDispatch, useSelector } from "react-redux";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
+import { NavLink } from "react-router-dom";
 
 export default function SentMailUi() {
   const dispatch = useDispatch();
@@ -21,16 +27,18 @@ export default function SentMailUi() {
   const deleteHandler = (user) => {
     console.log("Inside deleteHandler");
     console.log("id ", user);
-    
-    dispatch(deleteDataFromFirebase(user.id,"sent"))
+
+    dispatch(deleteDataFromFirebase(user.id, "sent"));
     setArrForUi((prevExpenses) => {
-      const updatedExpenses = prevExpenses.filter(
-        (ex) => ex.id !== user.id
-      );
+      const updatedExpenses = prevExpenses.filter((ex) => ex.id !== user.id);
 
       return updatedExpenses;
     });
-  }
+  };
+  const openSentInDetails = () => {
+    dispatch(inboxDetailsFire(!true));
+    dispatch(sentDetailsFire(true));
+  };
 
   return (
     <div style={{ position: "static", marginLeft: "2.5vw", width: "75vw" }}>
@@ -55,26 +63,39 @@ export default function SentMailUi() {
         }}
       >
         {arrForUi?.map((user) => (
-          <ListItem  key={user.id} style={{ display: "flex",justifyContent: "space-between" }}>
+          <ListItem
+            key={user.id}
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
             <div style={{ display: "flex" }}>
               <img
                 style={{ width: "1.4vw", height: "1.4vw" }}
                 src="https://tse2.mm.bing.net/th?id=OIP.z1oe7RLr5Sv6yaCszUf7tQHaHa&pid=Api&P=0&h=180"
                 alt="star_image"
               />
-              <span
+              <NavLink
+                onClick={openSentInDetails}
+                to={`/sentMail/${user.id}`}
                 style={{
                   fontSize: "1.3vw",
                   marginLeft: "1.2vw",
                   fontWeight: "500",
-                   cursor:'pointer'
+                  cursor: "pointer",
+                  textDecoration: "none",
+                  color: "inherit",
                 }}
               >
                 {user.subject}
-                <span style={{ marginLeft: "1.2vw", fontWeight: "100", cursor:'pointer' }}>
+                <span
+                  style={{
+                    marginLeft: "1.2vw",
+                    fontWeight: "100",
+                    cursor: "pointer",
+                  }}
+                >
                   {user.msg}
                 </span>
-              </span>
+              </NavLink>
             </div>
             <span style={{ marginLeft: "1.2vw", fontWeight: "100" }}>
               {new Date(user.timeStamp).toISOString().split("T")[0]}
@@ -83,9 +104,6 @@ export default function SentMailUi() {
               onClick={() => deleteHandler(user)}
               style={{ cursor: "pointer" }}
             />
-          
-
-          
           </ListItem>
         ))}
       </Paper>
