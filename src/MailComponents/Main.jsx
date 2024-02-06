@@ -19,7 +19,7 @@ export default function Main() {
   const location = useLocation();
 
   useEffect(() => {
-    // Check if the current location is "/sentMail" and dispatch updateIsSent accordingly
+    
     if (location.pathname === "/sentMail") {
       dispatch(updateIsSent(true));
     } else {

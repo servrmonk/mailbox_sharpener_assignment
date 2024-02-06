@@ -81,6 +81,7 @@ export default function FullPageView() {
           Subject: {obj?.subject}
         </Paper>
         <Paper
+        
           style={{
             width: "95%",
             padding: "10px",
@@ -90,7 +91,10 @@ export default function FullPageView() {
             height: "auto",
           }}
         >
-          Message:{obj?.msg}
+        <span dangerouslySetInnerHTML={{ __html: obj?.msg }}>
+
+        </span>
+          
         </Paper>
       </Paper>
     </Box>

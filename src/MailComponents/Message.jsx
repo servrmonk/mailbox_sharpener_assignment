@@ -34,8 +34,8 @@ export default function Message() {
     // Access values using refs
     const to = toRef.current.value;
     const subject = subjectRef.current.value;
-    // const quillValue = quillRef.current.value;
-    const msg = quillRef.current.editor.getText();
+    const msg = quillRef.current.value;
+    // const msg = quillRef.current.editor.getText();
 
     if (msg.trim() === "") {
       alert("Please enter some content in the editor.");

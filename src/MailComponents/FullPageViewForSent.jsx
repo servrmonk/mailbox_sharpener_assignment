@@ -18,7 +18,6 @@ export default function FullPageViewForSent() {
 
   let [obj, setObj] = useState({});
 
-  
   useEffect(() => {
     const getData = async () => {
       const url = `https://sharpener-assignment-bbf12-default-rtdb.firebaseio.com/sent/${cleanEmailForSent}/${id}.json`;
@@ -34,10 +33,9 @@ export default function FullPageViewForSent() {
     };
 
     getData(); // Call the function inside useEffect
-
   }, []);
   console.log("obj ", obj);
-  
+
   return (
     <Box
       sx={{
@@ -90,7 +88,8 @@ export default function FullPageViewForSent() {
             height: "auto",
           }}
         >
-          Message:{obj?.msg}
+          <span dangerouslySetInnerHTML={{ __html: obj?.msg }}></span>
+          
         </Paper>
       </Paper>
     </Box>

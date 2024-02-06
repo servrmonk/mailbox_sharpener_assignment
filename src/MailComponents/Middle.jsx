@@ -109,9 +109,13 @@ export default function Middle() {
                 }}
               >
                 {user.subject}
-                <span style={{ marginLeft: "12vw", fontWeight: "100" }}>
+                {/* <span style={{ marginLeft: "12vw", fontWeight: "100" }}>
                   {user.msg}
-                </span>
+                </span> */}
+                <span
+                  style={{ display:'inline-block', marginLeft: "12vw", fontWeight: "100" }}
+                  dangerouslySetInnerHTML={{ __html: user.msg }}
+                ></span>
               </NavLink>
             </div>
             <span style={{ fontWeight: "100", marginLeft: "1.2vw" }}>

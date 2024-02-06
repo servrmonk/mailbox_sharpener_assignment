@@ -87,13 +87,15 @@ export default function SentMailUi() {
               >
                 {user.subject}
                 <span
+                   dangerouslySetInnerHTML={{ __html: user.msg }}
                   style={{
+                    display:'inline-block',
                     marginLeft: "1.2vw",
                     fontWeight: "100",
                     cursor: "pointer",
                   }}
                 >
-                  {user.msg}
+                  
                 </span>
               </NavLink>
             </div>
